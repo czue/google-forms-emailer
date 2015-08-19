@@ -7,7 +7,7 @@ This script can be installed on any google form to setup automatic emails from t
 ## How it works
 
 - First you setup a [google form](https://www.google.com/forms/about/).
-- In this form you should collect email addresses somewhere. These can either be automatically collected, questions in the form, or both.
+- In this form you should collect email addresses somewhere. These can either be automatically collected from the logged in user, questions in the form, or both.
 - You should also add a question that triggers when the form should be sent.
 - Then whenever the trigger matches, the entire form will be sent to all the configured emails.
 
