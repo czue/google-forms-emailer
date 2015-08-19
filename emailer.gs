@@ -1,19 +1,39 @@
 function sendEmails() {
     var sheet = SpreadsheetApp.getActiveSheet();
-    var startRow = 2;  // First row of data to process
-    var numRows = 2;   // Number of rows to process
-    var emailColumn = 4;
-    // Fetch the range of cells A2:B3
-    var dataRange = sheet.getRange(startRow, 1, numRows, 5);
-    // Fetch values for each row in the Range.
-    var data = dataRange.getValues();
-    for (i in data) {
-        var row = data[i];
-        var emailAddress = row[emailColumn];  // First column
-        var message = row[1];       // Second column
-        var subject = "Sending emails from a Spreadsheet";
-        if (emailAddress) {
-            MailApp.sendEmail(emailAddress, subject, message);
-        }
+    var allData = sheet.getDataRange().getValues();
+    var headings = allData[0];
+    var employeeEmailColumn = 1;
+    var managerEmailColumn = 2;
+    for (var i = 1; i < allData.length; i++) {
+        emailRow(headings, allData[i], [employeeEmailColumn, managerEmailColumn]);
     }
+}
+
+
+function emailRow(headingRow, dataRow, addressIndexes) {
+    var emails = [];
+    for (var i = 0; i < addressIndexes.length; i++) {
+        emails.push(dataRow[addressIndexes[i]]);
+    }
+    var subject = "Sending emails from a Spreadsheet";
+    if (emails.length) {
+        MailApp.sendEmail({
+            to: emails[0],
+            cc: emails.slice(1).join(),
+            subject: subject,
+            htmlBody: formatMessage(headingRow, dataRow)
+        })
+    }
+}
+
+
+function formatMessage(headings, values) {
+    function fmtElement(heading, value) {
+        return '<p><strong>{heading}</strong></p><p>{value}</p>'.replace('{heading}', heading).replace('{value}', value);
+    }
+    message = '';
+    for (var i = 0; i < headings.length; i++) {
+        message += fmtElement(headings[i], values[i]);
+    }
+    return message;
 }
