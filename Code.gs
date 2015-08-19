@@ -3,6 +3,7 @@ var EMAIL_CHECK_SEND = 'yes';
 var EMAIL_CHECK_SENT = 'sent';
 var EMAIL_COLUMNS = [1, 2];
 
+
 function sendEmails() {
     var sheet = SpreadsheetApp.getActiveSheet();
     var allData = sheet.getDataRange().getValues();
