@@ -1,3 +1,4 @@
+var TEST_MODE = false;
 var PRIMARY_EMAIL_COLUMN = 1;
 
 // self evals
@@ -14,6 +15,10 @@ function sendAll() {
     sendSelfEvals(ss);
     sendManagerReviews(ss);
     sendPeerFeedback(ss);
+    if (TEST_MODE) {
+        var body = Logger.getLog();
+        MailApp.sendEmail('czue@dimagi.com', 'performance script output', body);
+    }
 }
 
 
@@ -109,12 +114,16 @@ function getSheetData(spreadsheet, sheetIndex, rows) {
 
 function sendEmail(primaryEmail, ccEmails, subject, messageBody) {
     if (isValidEmail(primaryEmail)) {
-        MailApp.sendEmail({
-            to: primaryEmail,
-            subject: subject,
-            cc: ccEmails.join(),
-            htmlBody: messageBody
-        });
+        if (TEST_MODE) {
+            Logger.log('would send ' + subject + ' to ' + primaryEmail + ' and ' + ccEmails.join());
+        } else {
+            MailApp.sendEmail({
+                to: primaryEmail,
+                subject: subject,
+                cc: ccEmails.join(),
+                htmlBody: messageBody
+            });
+        }
     }
 }
 
