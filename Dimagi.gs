@@ -37,8 +37,10 @@ function sendSelfEvals(ss) {
                 formatMessage(mainSheetInfo.headings, mainRow, HEADING_VALUE_TEMPLATE_FULL, 1)
             );
             sendEmail(primaryEmail, managerEmails, 'Self eval for ' + primaryEmail, selfEvalBody);
-            // mark the cell as sent
-            mainSheetInfo.sheet.getRange(i + 1, emailCheckColumn + 1).setValue(EMAIL_CHECK_SENT);
+            if (!TEST_MODE) {
+                // mark the cell as sent
+                mainSheetInfo.sheet.getRange(i + 1, emailCheckColumn + 1).setValue(EMAIL_CHECK_SENT);
+            }
         }
     }
 }
@@ -63,8 +65,10 @@ function sendManagerReviews(ss) {
             var ccEmails = extractEmailsFromRow(calcRow, MANAGER_CALC_EMAILS);
             var managerReviewBody = formatMessage(mainSheetInfo.headings, mainRow , HEADING_VALUE_TEMPLATE_FULL, 1);
             sendEmail(primaryEmail, ccEmails, 'Manager review for ' + managerEmail + ' from ' + primaryEmail, managerReviewBody);
-            // mark the cell as sent
-            mainSheetInfo.sheet.getRange(i + 1, emailCheckColumn + 1).setValue(EMAIL_CHECK_SENT);
+            if (!TEST_MODE) {
+                // mark the cell as sent
+                mainSheetInfo.sheet.getRange(i + 1, emailCheckColumn + 1).setValue(EMAIL_CHECK_SENT);
+            }
         }
     }
 }
@@ -90,8 +94,10 @@ function sendPeerFeedback(ss) {
             var managerEmail = calcRow[PEER_MANAGER_EMAIL_COLUMN_INDEX];
             var peerReviewBody = formatMessage(mainSheetInfo.headings, mainRow , HEADING_VALUE_TEMPLATE_FULL, 1);
             sendEmail(managerEmail, [], 'Peer review for ' + peerName + ' from ' + mainRow[PEER_AUTHOR_INDEX], peerReviewBody);
-            // mark the cell as sent
-            mainSheetInfo.sheet.getRange(i + 1, emailCheckColumn + 1).setValue(EMAIL_CHECK_SENT);
+            if (!TEST_MODE) {
+                // mark the cell as sent
+                mainSheetInfo.sheet.getRange(i + 1, emailCheckColumn + 1).setValue(EMAIL_CHECK_SENT);
+            }
         }
     }
 }
@@ -166,6 +172,4 @@ function formatSelfEval(calcSummary, selfEval) {
         "<h3>Employee Information</h3>{summary}" +
         "<h3>Self Eval</h3>{eval}"
     ).replace('{form}', SELF_EVAL_FORM_URL).replace('{summary}', calcSummary).replace('{eval}', selfEval);
-
-
 }
