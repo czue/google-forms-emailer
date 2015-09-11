@@ -3,7 +3,7 @@ var PRIMARY_EMAIL_COLUMN = 1;
 // self evals
 var SELF_EVAL_FORM_URL = 'https://docs.google.com/a/dimagi.com/forms/d/1SOAiTqQbr5jQcs2jpN_jNuak0B8EIW9xXbn7Cdi-Cuk/viewform';
 var SELF_EVAL_SHEET_INDEX = 0;
-var SELF_EVAL_CALC_SHEET_INDEX = 4;
+var SELF_EVAL_CALC_SHEET_INDEX = 5;
 var EMAIL_CHECK_HEADING = 'Finalize and Submit to manager?';
 var EMAIL_CHECK_SEND = 'Finalize and send to manager';
 var EMAIL_CHECK_SENT = 'sent';
@@ -41,7 +41,7 @@ function sendSelfEvals(ss) {
 function sendManagerReviews(ss) {
     // config data
     var MANAGER_REVIEW_SHEET_INDEX = 1;
-    var MANAGER_REVIEW_CALC_SHEET_INDEX = 5;
+    var MANAGER_REVIEW_CALC_SHEET_INDEX = 6;
     var MANAGER_EMAIL_CHECK_HEADING = 'internal_email_status';
     var MANAGER_CALC_EMAILS = [2];
     var MANAGER_CALC_MANAGER_COLUMN = 1;
@@ -69,7 +69,7 @@ function sendPeerFeedback(ss) {
     // todo: this is basically exactly the same as manager review
     // config data
     var PEER_REVIEW_SHEET_INDEX = 2;
-    var PEER_REVIEW_CALC_SHEET_INDEX = 6;
+    var PEER_REVIEW_CALC_SHEET_INDEX = 7;
     var PEER_EMAIL_CHECK_HEADING = 'internal_email_status';
     var PEER_MANAGER_EMAIL_COLUMN_INDEX = 1;
     var PEER_AUTHOR_INDEX = 2;
@@ -92,9 +92,13 @@ function sendPeerFeedback(ss) {
 }
 
 
-function getSheetData(spreadsheet, sheetIndex) {
+function getSheetData(spreadsheet, sheetIndex, rows) {
     var sheet = spreadsheet.getSheets()[sheetIndex];
     var data = sheet.getDataRange().getValues();
+    if (rows) {
+        var colCount = data[0].length;
+        data = sheet.getRange(1, 1, colCount, rows).getValues();
+    }
     return {
         'sheet': sheet,
         'data': data,
